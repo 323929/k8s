@@ -32,7 +32,7 @@
 
 ## 配置LoadBalance
 
-**Note:**  ***在配置HA k8s 集群前需要为kube-apiserver 创建Load Balance，此处选取haproxy + keepalived 搭建，云环境可以直接使用云服务商的SLB 服务***
+> **Note:**  ***在配置HA k8s 集群前需要为kube-apiserver 创建Load Balance，此处选取haproxy + keepalived 搭建，云环境可以直接使用云服务商的SLB 服务***
 
 #### 1. 安装haproxy , keepalived
 
@@ -152,7 +152,7 @@ echo "Being Master ..." >> $LOGFILE
 shell> chmod a+x /etc/keepalived/haproxy_check.sh /etc/keepalived/haproxy_master.sh
 ```
 
-**Note:**  ***剩余Control Plane节点的/etc/keepalived/keepalived.conf文件中state设置为BACKUP，priority值优先级依次降低***
+> **Note:**  ***剩余Control Plane节点的/etc/keepalived/keepalived.conf文件中state设置为BACKUP，priority值优先级依次降低***
 
 #### 5. 启动 keepalived
 
@@ -181,7 +181,7 @@ shell> service docker start
 
 #### 3. 安装k8s组件kubelet kubeadm kubectl
 
-**Note:**  ***Workers节点可以选择安装kubectl***
+> **Note:**  ***Workers节点可以选择安装kubectl***
 
 ```bash
 shell> apt-get update && apt-get install -y apt-transport-https curl
@@ -214,7 +214,7 @@ Kubernetes v1.14.1
 
 ### 1. 在k8s1机器上创建集群配置文件kubeadm-config.yaml
 
-**Note:**  ***以下文件需要用到域名，请为VIP配置域名解析***
+> **Note:**  ***以下文件需要用到域名，请为VIP配置域名解析***
 
 ```bash
 shell> vim kubeadm-config.yaml  
@@ -227,7 +227,7 @@ apiServer:
 controlPlaneEndpoint: "www.clusterlb.net:6443"
 ```
 
-**Note:**  ***www.clusterlb.net为VIP绑定的域名***
+> **Note:**  ***www.clusterlb.net为VIP绑定的域名***
 
 ### 2. 执行配置命令kubeadm init
 
@@ -235,7 +235,7 @@ controlPlaneEndpoint: "www.clusterlb.net:6443"
 shell> sudo kubeadm init --config=kubeadm-config.yaml --experimental-upload-certs
 ```
 
-**Note:**  ***--experimental-upload-certs用于将应该在所有Control Plane节点之间共享的证书上载到集群。如果您希望手动或使用自动化工具跨Control Plane节点复制证书，请去除这个参数选项，并参阅下面的手动证书分发部分。--experimental-upload-certs参数在v1.14.0版本以后才出现，v1.14.0之前的版本需要手动分发证书***
+> **Note:**  ***--experimental-upload-certs用于将应该在所有Control Plane节点之间共享的证书上载到集群。如果您希望手动或使用自动化工具跨Control Plane节点复制证书，请去除这个参数选项，并参阅下面的手动证书分发部分。--experimental-upload-certs参数在v1.14.0版本以后才出现，v1.14.0之前的版本需要手动分发证书***
 
 命令完成后，您应该看到如下内容：
 
@@ -274,7 +274,7 @@ shell> kubectl get pod -n kube-system -w
 
 ### 4. 其他control plane节点加入
 
-**Caution:** ***只有在第一个control plane节点完成初始化之后，才能按顺序加入新的control plane节点。***
+> **Caution:** ***只有在第一个control plane节点完成初始化之后，才能按顺序加入新的control plane节点。***
 
 对于其他的control plane节点，应该:
 
@@ -334,13 +334,13 @@ weave-net-pxrm5                2/2     Running   0          92m
 weave-net-xgj9m                2/2     Running   0          82m
 ```
 
-**Note:**  ***Node的status状态均为Ready，pod的status状态均为Running***
+> **Note:**  ***Node的status状态均为Ready，pod的status状态均为Running***
 
 ---
 
 ### 手动证书分发
 
-**Note:**  ***在v1.14.0版本之前，都需要手动分发证书，或者在v1.14.0版本之后，在kubeadm init 时没有添加--experimental-upload-certs参数***
+> **Note:**  ***在v1.14.0版本之前，都需要手动分发证书，或者在v1.14.0版本之后，在kubeadm init 时没有添加--experimental-upload-certs参数***
 
 分发证书文件到其他control plane节点，脚本如下 :
 
